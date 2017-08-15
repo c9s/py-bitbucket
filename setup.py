@@ -17,6 +17,7 @@ setup(name='py3bitbucket',
       author_email='yoanlin93@gmail.com',
       packages=['bitbucket'],
       license='MIT',
+      scripts=['bin/bitbucket'],
       url='https://github.com/c9s/py-bitbucket',
       install_requires=requirements,
       tests_require=test_requirements
