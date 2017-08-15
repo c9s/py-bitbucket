@@ -14,6 +14,7 @@ Since this package uses OAuth2 API, please remember to setup the callback url.
 (`http://localhost` is fine)
     
 ```python
-bitbucket = BitBucketClient(client_id, client_secret=client_secret, token=token, scope=scope)
+scope = ["webhook", "repository", "issue", "pullrequest"]
+bitbucket = BitBucketClient(client_id, client_secret=client_secret, scope=scope)
 webhooks = bitbucket.hooks("foo", "reop")
 ```
