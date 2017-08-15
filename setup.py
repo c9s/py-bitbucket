@@ -16,6 +16,8 @@ setup(name='bitbucket',
       author='Yo-An lin',
       author_email='yoanlin93@gmail.com',
       packages=['bitbucket'],
+      license='MIT',
+      url='https://github.com/c9s/py-bitbucket',
       install_requires=requirements,
       tests_require=test_requirements
       )
