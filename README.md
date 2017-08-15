@@ -18,3 +18,28 @@ scope = ["webhook", "repository", "issue", "pullrequest"]
 bitbucket = BitBucketClient(client_id, client_secret=client_secret, scope=scope)
 webhooks = bitbucket.hooks("foo", "reop")
 ```
+
+```python
+slack_webhook = 'https://hooks.slack.com/services/AAA/BBB/CCC';
+ret = bitbucket.create_hook(user, repo,
+        url = slack_webhook,
+        description = 'Commits to Slack',
+        events = ["repo:push"])
+print("Created %s" % (ret['uuid']))
+```
+
+## Status
+
+The implementation right now is really rough (it only supports 2 web hook API).
+
+Pull requests are welcomed.
+
+
+## License
+
+MIT License
+
+
+## Author
+
+Yo-An Lin <yoanlin93@gmail.com>
