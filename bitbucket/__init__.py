@@ -13,11 +13,10 @@ import json
 authorization_base_url = 'https://bitbucket.org/site/oauth2/authorize'
 token_url = 'https://bitbucket.org/site/oauth2/access_token'
 
-from requests_oauthlib import OAuth1Session
 
 class BitBucketClient:
-    def __init__(self,client_id, client_secret, token=None, scope=None):
-        self.client = BackendApplicationClient(client_id=client_id)
+    def __init__(self, client_id, client_secret, token=None, scope=None, client=None):
+        self.client = client if client else BackendApplicationClient(client_id=client_id)
         self.oauth = OAuth2Session(client=self.client, token=token, scope=scope)
         self.token = self.oauth.fetch_token(token_url=token_url, client_id=client_id, client_secret=client_secret)
 

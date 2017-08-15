@@ -16,8 +16,24 @@ Since this package uses OAuth2 API, please remember to setup the callback url.
 ```python
 scope = ["webhook", "repository", "issue", "pullrequest"]
 bitbucket = BitBucketClient(client_id, client_secret=client_secret, scope=scope)
+```
+
+The bitbucket package uses `requests_oauthlib` as its core library for sending
+API requests, therefore you can also pass your preferred client object to the
+bitbucket client class:
+
+```python
+client = BackendApplicationClient(client_id=client_id)
+bitbucket = BitBucketClient(client=client, client_id=client_id, client_secret=client_secret, scope=scope)
+```
+
+List web hooks:
+
+```python
 webhooks = bitbucket.hooks("foo", "reop")
 ```
+
+Create new web hook:
 
 ```python
 slack_webhook = 'https://hooks.slack.com/services/AAA/BBB/CCC';
@@ -27,6 +43,10 @@ ret = bitbucket.create_hook(user, repo,
         events = ["repo:push"])
 print("Created %s" % (ret['uuid']))
 ```
+
+
+
+
 
 ## Status
 
