@@ -30,7 +30,7 @@ print("Created %s" % (ret['uuid']))
 
 ## Status
 
-The implementation right now is really rough (it only supports 2 web hook API).
+The implementation right now is really rough and tiny (it only supports 2 web hook API).
 
 Pull requests are welcomed.
 
