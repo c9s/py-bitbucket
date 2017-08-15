@@ -10,7 +10,7 @@ requirements = [
     'tabulate'
 ]
 test_requirements = [ ]
-setup(name='bitbucket',
+setup(name='py3bitbucket',
       version='0.0.1',
       description='bitbucket client',
       author='Yo-An lin',
