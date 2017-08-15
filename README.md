@@ -1,5 +1,7 @@
 # BitBucket Client
 
+This BitBucket client library is written in Python.
+
 ## Install
 
     python setup.py install
