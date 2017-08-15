@@ -5,11 +5,7 @@ requirements = [
     'oauthlib',
     'requests_oauthlib',
     'click',
-    'pickle',
     'PyYAML',
-    'http',
-    'socketserver',
-    'webbrowser',
     'pprint',
     'tabulate'
 ]
@@ -19,6 +15,7 @@ setup(name='bitbucket',
       description='bitbucket client',
       author='Yo-An lin',
       author_email='yoanlin93@gmail.com',
+      packages=['bitbucket'],
       install_requires=requirements,
       tests_require=test_requirements
       )
