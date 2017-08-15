@@ -27,13 +27,13 @@ client = BackendApplicationClient(client_id=client_id)
 bitbucket = BitBucketClient(client=client, client_id=client_id, client_secret=client_secret, scope=scope)
 ```
 
-List web hooks:
+### Listing web hooks
 
 ```python
 webhooks = bitbucket.hooks("foo", "reop")
 ```
 
-Create new web hook:
+### Creating new web hook
 
 ```python
 slack_webhook = 'https://hooks.slack.com/services/AAA/BBB/CCC';
