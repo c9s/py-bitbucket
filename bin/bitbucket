@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+import requests
+import oauthlib
+from requests_oauthlib import OAuth1Session
+import click
+import pickle
+import os
+import sys
+import yaml
+
+from threading import Event
+from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler
+import json
+from pprint import pprint
+from tabulate import tabulate
+from bitbucket import BitBucketClient
+
+def webhooks_in_table(webhooks):
+    rows = []
+    for webhook in webhooks:
+        rows.append([
+            "A" if webhook['active'] else "D",
+            webhook['uuid'],
+            webhook['description'],
+            webhook['url'],
+            ','.join(webhook['events'])
+        ])
+    print(tabulate(rows))
+
+@click.command()
+@click.option('--client-id', type = str, required = True, default=lambda: os.environ.get('BB_CLIENT_ID', ''), help = 'client key')
+@click.option('--client-secret', type = str, required = True, default=lambda: os.environ.get('BB_CLIENT_SECRET', ''), help = 'client secret')
+@click.option('--user', type = str, required = True, default = 'linkernetworks', help = 'user name')
+@click.option('--repo', type = str, required = True, help = 'repository name')
+@click.option('--details', is_flag = True, help = 'show details')
+def main(client_id, client_secret, user, repo, details):
+    scope = ["webhook", "repository", "issue", "pullrequest"]
+    print("Getting webhook list of %s/%s" % (user, repo))
+    if os.path.exists(".access_token"):
+        token = pickle.load(open(".access_token", 'rb'))
+        bitbucket = BitBucketClient(client_id, client_secret=client_secret, token=token, scope=scope)
+    else:
+        bitbucket = BitBucketClient(client_id, client_secret=client_secret, scope=scope)
+        pickle.dump(bitbucket.token, open(".access_token", 'wb'))
+    print(bitbucket.token)
+
+    webhooks = bitbucket.hooks(user, repo)
+    if details:
+        for webhook in webhooks:
+            print(yaml.dump(webhook))
+    else:
+        webhooks_in_table(webhooks)
+
+if __name__ == "__main__":
+    main()
