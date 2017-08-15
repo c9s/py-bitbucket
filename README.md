@@ -8,7 +8,7 @@ This BitBucket client library is written in Python.
 
 ## Usage
     
-```py
+```python
 bitbucket = BitBucketClient(client_id, client_secret=client_secret, token=token, scope=scope)
 webhooks = bitbucket.hooks("foo", "reop")
 ```
