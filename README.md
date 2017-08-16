@@ -45,8 +45,11 @@ print("Created %s" % (ret['uuid']))
 ```
 
 
+## Command line script
 
-
+```
+bitbucket webhook list --user c9s --repo foo
+```
 
 ## Status
 
