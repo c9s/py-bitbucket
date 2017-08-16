@@ -34,8 +34,18 @@ def webhooks_in_table(webhooks):
 @click.option('--client-secret', type = str, required = True, default=lambda: os.environ.get('BB_CLIENT_SECRET', ''), help = 'client secret')
 @click.pass_context
 def cli(ctx, debug, client_id, client_secret):
+    scope = ["webhook", "repository", "issue", "pullrequest"]
+
     ctx.obj['CLIENT_ID'] = client_id
     ctx.obj['CLIENT_SECRET'] = client_secret
+    if os.path.exists(".access_token"):
+        token = pickle.load(open(".access_token", 'rb'))
+        bitbucket = BitBucketClient(client_id, client_secret=client_secret, token=token, scope=scope)
+    else:
+        bitbucket = BitBucketClient(client_id, client_secret=client_secret, scope=scope)
+        pickle.dump(bitbucket.token, open(".access_token", 'wb'))
+    # print(bitbucket.token)
+    ctx.obj['bitbucket'] = bitbucket
     click.echo('Debug mode is %s' % ('on' if debug else 'off'))
 
 @cli.group(chain=True)
@@ -43,25 +53,28 @@ def cli(ctx, debug, client_id, client_secret):
 def webhook(ctx):
     pass
 
+@webhook.command('create')
+@click.option('--user', type = str, required = True, default = 'linkernetworks', help = 'user name')
+@click.option('--repo', type = str, required = True, help = 'repository name')
+@click.option('--url', type = str, required = True, help = 'webhook url')
+@click.option('--description', type = str, required = True, help = 'webhook description')
+@click.option('--events', type = str, required = True, help = 'webhook events')
+def webhook_create(ctx, user, repo, url, description, events = "repo:push"):
+    bitbucket = ctx.obj['bitbucket']
+    ret = bitbucket.create_hook(user, repo,
+            url = url,
+            description = description,
+            events = events.split(","))
+    print("Created %s" % (ret['uuid']))
+
 @webhook.command('list')
 @click.option('--user', type = str, required = True, default = 'linkernetworks', help = 'user name')
 @click.option('--repo', type = str, required = True, help = 'repository name')
 @click.option('--details', is_flag = True, help = 'show details')
 @click.pass_context
 def webhook_list(ctx, user, repo, details):
-    scope = ["webhook", "repository", "issue", "pullrequest"]
     print("Getting webhook list of %s/%s" % (user, repo))
-
-    client_id = ctx.obj['CLIENT_ID']
-    client_secret = ctx.obj['CLIENT_SECRET']
-    if os.path.exists(".access_token"):
-        token = pickle.load(open(".access_token", 'rb'))
-        bitbucket = BitBucketClient(client_id, client_secret=client_secret, token=token, scope=scope)
-    else:
-        bitbucket = BitBucketClient(client_id, client_secret=client_secret, scope=scope)
-        pickle.dump(bitbucket.token, open(".access_token", 'wb'))
-    print(bitbucket.token)
-
+    bitbucket = ctx.obj['bitbucket']
     webhooks = bitbucket.hooks(user, repo)
     if details:
         for webhook in webhooks:
