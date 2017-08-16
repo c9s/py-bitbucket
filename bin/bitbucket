@@ -65,7 +65,7 @@ def webhook_create(ctx, user, repo, url, description, events = "repo:push"):
             url = url,
             description = description,
             events = events.split(","))
-    print("Created %s" % (ret['uuid']))
+    print("Webhook is created %s" % (ret['uuid']))
 
 @webhook.command('list')
 @click.option('--user', type = str, required = True, default = 'linkernetworks', help = 'user name')
@@ -73,7 +73,7 @@ def webhook_create(ctx, user, repo, url, description, events = "repo:push"):
 @click.option('--details', is_flag = True, help = 'show details')
 @click.pass_context
 def webhook_list(ctx, user, repo, details):
-    print("Getting webhook list of %s/%s" % (user, repo))
+    print("Fetching Webhook list of %s/%s" % (user, repo))
     bitbucket = ctx.obj['bitbucket']
     webhooks = bitbucket.hooks(user, repo)
     if details:
